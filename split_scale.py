@@ -5,7 +5,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, QuantileTransformer, PowerTransformer, RobustScaler, MinMaxScaler
 
 def split_my_data(df, train_pct=0.70, seed=123):
-    """This function splits data for testing and training"""
+    """
+    Takes in a dataframe, training pct amount and seed to split into 2 df's testing and training
+    seed will default to 123 if not specified
+    train_pct defaults to .7 if not specified
+    """
     train, test = train_test_split(df, train_size=train_pct, random_state=seed)
     return train, test
 

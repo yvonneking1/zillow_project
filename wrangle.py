@@ -31,4 +31,23 @@ def wrangle_zillow():
     zillow.bath_count.replace(0, np.nan, inplace=True)
     zillow.bedroom_count.replace(0, np.nan, inplace=True)
     zillow.dropna(inplace=True)
+    zillow.dropna(inplace=True)
+    zillow.drop(columns=["fips", "FIPS"], inplace=True)
+    zillow["tax_percentage"] = zillow.tax_rate * 100
     return zillow
+
+def la_county():
+    df = wrangle_zillow()
+    la_county = df[df.county_name == "Los Angeles"]
+    return la_county
+
+def orange_county():
+    df = wrangle_zillow()
+    orange_county = df[df.county_name == "Orange"]
+    return orange_county
+    
+
+def ventura_county():
+    df = wrangle_zillow()
+    ventura_county = df[df.county_name == "Ventura"]
+    return ventura_county
