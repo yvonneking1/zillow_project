@@ -24,16 +24,27 @@ def get_db_url(db):
 URL = get_db_url("zillow")
 
 def wrangle_zillow():
+    #merge fips csv onto zillow df, rename columns
     zillow = pd.read_sql(query, URL)
     FIPS = pd.read_csv("FIPS.txt", sep="\t")
     zillow = pd.merge(left=zillow, right=FIPS, left_on="fips", right_on="FIPS")
     zillow.rename(columns = {"Name": "county_name"}, inplace = True)
     zillow.bath_count.replace(0, np.nan, inplace=True)
-    zillow.bedroom_count.replace(0, np.nan, inplace=True)
-    zillow.dropna(inplace=True)
-    zillow.dropna(inplace=True)
-    zillow.drop(columns=["fips", "FIPS"], inplace=True)
+    
+    #find outliers
     zillow["tax_percentage"] = zillow.tax_rate * 100
+    zillow["home_value_std"] = zillow.assessed_tax_value.std()
+    zillow["home_value_mean"] = zillow.assessed_tax_value.mean()
+    zillow["anomaly_cut_off"] = zillow["home_value_std"] * 3
+    zillow["upper_limit"] = zillow["home_value_mean"] + zillow["home_value_std"]
+    zillow["lower_limit"] = zillow["home_value_mean"] - zillow["anomaly_cut_off"]
+    zillow["is_outlier"] = zillow.assessed_tax_value > zillow.upper_limit
+    
+    zillow.is_outlier.replace(True, np.nan, inplace=True)
+    
+    #drop columns and nan
+    zillow.dropna(inplace=True)
+    zillow.drop(columns=["fips", "FIPS", "anomaly_cut_off", "home_value_std", "home_value_mean", "lower_limit", "upper_limit", "is_outlier"], inplace=True)
     return zillow
 
 def la_county():
