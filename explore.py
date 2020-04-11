@@ -5,6 +5,7 @@ import pandas as pd
 from pandas_profiling import ProfileReport
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy import stats
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
@@ -60,6 +61,50 @@ def tax_distro_visualization():
 
     
     
+def t_test_orange_county(train):
+    alpha = .05
+    x1 = train[train.county_name == "Orange"].assessed_tax_value
+    mu = train.assessed_tax_value.mean()
+    t, p = stats.ttest_1samp(x1, mu)
+    if p < alpha:
+        print("We reject the null hypothesis")
+    else:
+        print("We fail to reject the null hypothesis")
+    print(f't = {t:.3}')
+    print(f'p = {p:.3}')
+    return t, p
+
+    
+    
+def t_test_los_angeles_county(train):
+    alpha = .05
+    x1 = train[train.county_name == "Los Angeles"].assessed_tax_value
+    mu = train.assessed_tax_value.mean()
+    t, p = stats.ttest_1samp(x1, mu)
+    if p < alpha:
+        print("We reject the null hypothesis")
+    else:
+        print("We fail to reject the null hypothesis")
+    print(f't = {t:.3}')
+    print(f'p = {p:.3}')
+    return t, p
+
+    
+    
+def t_test_ventura_county(train):
+    alpha = .05
+    x1 = train[train.county_name == "Ventura"].assessed_tax_value
+    mu = train.assessed_tax_value.mean()
+    t, p = stats.ttest_1samp(x1, mu)
+    if p < alpha:
+        print("We reject the null hypothesis")
+    else:
+        print("We fail to reject the null hypothesis")
+    print(f't = {t:.3}')
+    print(f'p = {p:.3}')
+    return t, p
+    
+    
 def tax_summary():
     """
     Shows us a summary of mean, median, max, min, 
@@ -105,5 +150,5 @@ def plot_categorical_and_continous_vars(categorical_var, continuous_var, datafra
     
     sns.boxplot(y=categorical_var, x=continuous_var, data=dataframe, ax=axes[0])
     sns.swarmplot(y=categorical_var, x=continuous_var, data=dataframe, color =".2", alpha=.7, ax=axes[0])
-    sns.violinplot(y=categorical_var, x=continuous_var, data=dataframe, inner="stick", ax=axes[1])
-    sns.barplot(y=categorical_var, x=continuous_var, data=dataframe, ax=axes[2])
+#     sns.violinplot(y=categorical_var, x=continuous_var, data=dataframe, inner="stick", ax=axes[1])
+#     sns.barplot(y=categorical_var, x=continuous_var, data=dataframe, ax=axes[2])
