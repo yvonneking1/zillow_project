@@ -124,7 +124,7 @@ def tax_summary():
     county_min.columns = ['Min Tax Rate %']
     
     county_std = pd.DataFrame(df.groupby("county_name").tax_rate.std())
-    county_std.columns = ['AVG STD of Tax Rates']
+    county_std.columns = ['STD of Tax Rates']
     
     summary1 = pd.merge(county_mean, county_median, left_index=True, right_index=True)
     summary2 = pd.merge(county_max , county_min , left_index=True, right_index=True)
